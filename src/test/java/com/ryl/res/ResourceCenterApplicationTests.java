@@ -1,4 +1,4 @@
-package com.ryl.res.demo;
+package com.ryl.res;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
