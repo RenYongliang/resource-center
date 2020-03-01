@@ -4,36 +4,28 @@
 <!-- scan:当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true -->
 <!-- scanPeriod:设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。 -->
 <!-- debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 -->
-<configuration scan="true" scanPeriod="10 seconds">
-
-    <conversionRule conversionWord="mycolor" converterClass="com.ea.starlink.logback.starter.base.LogbackColor"/>
-
-    <conversionRule conversionWord="curIp" converterClass="com.ea.starlink.logback.starter.base.LogIpConfig" />
-
-    <conversionRule conversionWord="hostName" converterClass="com.ea.starlink.logback.starter.base.LogHostConfig" />
+<configuration scan="false" scanPeriod="10 seconds">
 
     <!-- 设置系统级别，不设置默认为debug -->
     <springProperty scope="context" name="LOG_LEVEL" source="logback.level" defaultValue="DEBUG"/>
 
 
-    <!-- 日志输入默认输出到STDOUT，可选 KAFKA -->
+    <!-- 日志输入默认输出到STDOUT -->
     <springProperty scope="context" name="LOG_APPENDER" source="logback.appender" defaultValue="STDOUT"/>
-    <!--  日志kafka配置 -->
+
     <!--  日志级别 -->
     <springProperty scope="context" name="LOG_LEVEL" source="logback.level"/>
-    <!--  kafka集群地址 -->
-    <springProperty scope="context" name="LOG_BROKER_LIST" source="spring.kafka.bootstrap-servers"/>
-    <!--  kafka topic -->
-    <springProperty scope="context" name="LOG_TOPIC" source="logback.topic"/>
+
     <!--  日志输出路径 -->
     <springProperty scope="context" name="LOG_PATH" source="logback.path" defaultValue="/tmp"/>
+
     <!--  控制台以及输出到日志样式 -->
     <springProperty scope="context" name="LOG_LAYOUT" source="logback.layout"/>
-    <!--  输出到kafka日志样式 -->
-    <springProperty scope="context" name="LOG_LAYOUT_KAFKA" source="logback.layout.kafka"/>
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!--encoder 默认配置为PatternLayoutEncoder-->
         <encoder>
+            <charset>UTF-8</charset>
             <pattern>${LOG_LAYOUT}</pattern>
         </encoder>
         <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
@@ -116,34 +108,6 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-    </appender>
-
-
-    <!--  输出到kafka日志样式 -->
-    <appender name="KAFKA" class="com.github.danielwegener.logback.kafka.KafkaAppender">
-        <encoder>
-            <pattern>${LOG_LAYOUT_KAFKA}</pattern>
-            <charset>utf8</charset>
-        </encoder>
-        <topic>${LOG_TOPIC}</topic>
-        <!-- 我们不关心如何对日志消息进行分区 -->
-        <keyingStrategy class="com.github.danielwegener.logback.kafka.keying.NoKeyKeyingStrategy"/>
-        <!-- 使用异步传递。 日志记录不会阻止应用程序线程 -->
-        <deliveryStrategy class="com.github.danielwegener.logback.kafka.delivery.AsynchronousDeliveryStrategy"/>
-        <!--注意此处应该是的kafka配置属性-->
-        <producerConfig>bootstrap.servers=${LOG_BROKER_LIST}</producerConfig>
-        　　　　
-        <!-- 不用等待代理对批的接收进行打包。  -->
-        <producerConfig>acks=0</producerConfig>
-        <!-- 等待最多1000毫秒并收集日志消息，然后再批量发送 -->
-        <producerConfig>linger.ms=1000</producerConfig>
-        <!-- 即使生产者缓冲区运行已满，也不要阻止应用程序而是开始丢弃消息 -->
-        <producerConfig>max.block.ms=0</producerConfig>
-        <!-- 如果kafka不可用，这是后备appender。 -->
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE_INFO"/>
-        <appender-ref ref="FILE_DEBUG"/>
-        <appender-ref ref="FILE_ERROR"/>
     </appender>
 
     <!-- 生产环境下，将此级别配置为适合的级别，以免日志文件太多或影响程序性能 -->

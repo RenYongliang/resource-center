@@ -1,5 +1,6 @@
 package com.ryl.res.model.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @Data
 @ApiModel(value = "资源实体")
 @Accessors(chain = true)
+@TableName(value = "t_resource")
 public class Resource {
 
     @ApiModelProperty("主键id")
