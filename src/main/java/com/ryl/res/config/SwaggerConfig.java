@@ -7,6 +7,7 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
@@ -29,10 +30,11 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
+        Contact contact = new Contact("yongliang.ren", "", "1017632646@qq.com");
         return new ApiInfoBuilder()
                 .title("资源中心 API")
-                .termsOfServiceUrl("")
                 .description("")
+                .contact(contact)
                 .version("SNAPSHOT-0.1")
                 .build();
     }
