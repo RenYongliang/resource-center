@@ -14,12 +14,12 @@ import java.util.List;
 @AllArgsConstructor
 public enum FileTypeEnum {
 
-    DOCUMENT_TYPE_LIST(0, Arrays.asList("TXT", "DOC", "HLP", "RTF", "HTML", "PDF")),
-    IMAGE_TYPE_LIST(1, Arrays.asList("JPG", "JPEG", "PNG", "GIF", "BMP", "WBMP", "TIF", "PIC")),
-    VOICE_TYPE_LIST(2, Arrays.asList("WAV", "AIF", "AU", "MP3", "RAM", "WMA", "MMF", "AMR", "AAC", "FLAC")),
-    VIDEO_TYPE_LIST(3, Arrays.asList("MP4", "RMVB", "RM", "MPEG", "AVI", "MOV", "ASF", "WMV", "NAVI", "3GP", "MKV", "FLV", "F4V")),
-    COMPRESS_TYPE_LIST(4, Arrays.asList("RAR", "ZIP", "7Z")),
-    OTHER_TYPE_LIST(5, new ArrayList<>());
+    DOCUMENT_TYPE(0, Arrays.asList("TXT", "DOC", "HLP", "RTF", "HTML", "PDF")),
+    IMAGE_TYPE(1, Arrays.asList("JPG", "JPEG", "PNG", "GIF", "BMP", "WBMP", "TIF", "PIC")),
+    VOICE_TYPE(2, Arrays.asList("WAV", "AIF", "AU", "MP3", "RAM", "WMA", "MMF", "AMR", "AAC", "FLAC")),
+    VIDEO_TYPE(3, Arrays.asList("MP4", "RMVB", "RM", "MPEG", "AVI", "MOV", "ASF", "WMV", "NAVI", "3GP", "MKV", "FLV", "F4V")),
+    COMPRESS_TYPE(4, Arrays.asList("RAR", "ZIP", "7Z")),
+    OTHER_TYPE(5, new ArrayList<>());
 
     private int type;
 

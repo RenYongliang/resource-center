@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -41,8 +42,9 @@ public class ObsClientUtil {
     public List<String> parallelUpload(MultipartFile[] multipartFiles) {
         List<String> urlList = new Vector<>(multipartFiles.length);
         List<Resource> resourceList = new Vector<>();
+        ExecutorService es = Executors.newCachedThreadPool();
         for (MultipartFile file : multipartFiles) {
-            Executors.newCachedThreadPool().execute(() -> {
+            es.execute(() -> {
                 //文件名
                 String fileName = file.getOriginalFilename();
                 //文件后缀名
@@ -95,6 +97,6 @@ public class ObsClientUtil {
                 return fileTypes.getType();
             }
         }
-        return FileTypeEnum.OTHER_TYPE_LIST.getType();
+        return FileTypeEnum.OTHER_TYPE.getType();
     }
 }
