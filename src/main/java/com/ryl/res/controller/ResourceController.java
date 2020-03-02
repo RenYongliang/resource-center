@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,10 +27,10 @@ public class ResourceController {
     @Autowired
     IResourceService iResourceService;
 
-    @PostMapping("/hello")
-    @ApiOperation("hello接口")
-    public List<Resource> hello(){
-        List<Resource> list = iResourceService.lambdaQuery().list();
-        return list;
+    @PostMapping("/upload")
+    @ApiOperation("资源上传接口")
+    public List<String> upload(MultipartFile[] multipartFiles){
+        List<String> urls = iResourceService.uploadFile(multipartFiles);
+        return urls;
     }
 }

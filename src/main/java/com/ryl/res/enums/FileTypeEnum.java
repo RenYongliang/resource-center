@@ -1,4 +1,4 @@
-package com.ryl.res.constants;
+package com.ryl.res.enums;
 
 import lombok.AllArgsConstructor;
 

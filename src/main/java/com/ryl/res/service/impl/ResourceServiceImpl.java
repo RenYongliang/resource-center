@@ -4,7 +4,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ryl.res.mapper.ResourceMapper;
 import com.ryl.res.model.entity.Resource;
 import com.ryl.res.service.IResourceService;
+import com.ryl.res.util.ObsClientUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @author: ryl
@@ -13,4 +18,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ResourceServiceImpl extends ServiceImpl<ResourceMapper,Resource> implements IResourceService {
+
+    @Autowired
+    private ObsClientUtil obsClientUtil;
+
+
+    @Override
+    public List<String> uploadFile(MultipartFile[] multipartFiles) {
+        return obsClientUtil.parallelUpload(multipartFiles);
+    }
 }

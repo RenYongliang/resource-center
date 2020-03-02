@@ -2,12 +2,13 @@ package com.ryl.res.util;
 
 import com.obs.services.ObsClient;
 import com.obs.services.model.PutObjectResult;
-import com.ryl.res.constants.FileTypeEnum;
+import com.ryl.res.enums.FileTypeEnum;
 import com.ryl.res.model.entity.Resource;
 import com.ryl.res.service.IResourceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -22,6 +23,7 @@ import java.util.concurrent.Executors;
  * @date: 2020-02-29 18:36:18
  */
 @Slf4j
+@Component
 public class ObsClientUtil {
 
     @Autowired
@@ -40,7 +42,7 @@ public class ObsClientUtil {
      * @return
      */
     public List<String> parallelUpload(MultipartFile[] multipartFiles) {
-        List<String> urlList = new Vector<>(multipartFiles.length);
+        List<String> urlList = new Vector<>();
         List<Resource> resourceList = new Vector<>();
         ExecutorService es = Executors.newCachedThreadPool();
         for (MultipartFile file : multipartFiles) {

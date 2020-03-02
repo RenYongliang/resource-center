@@ -6,6 +6,10 @@ spring:
     url: jdbc:mysql://120.76.128.254:3306/test?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
     username: root
     password: ryl123
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 500MB
 mybatis-plus:
   mapper-locations: classpath*:com\ryl\res\mapper\**\*.xml
   configuration:
@@ -20,3 +24,4 @@ huaweiyun:
     access-key: MTMDAN7TXAWZWLU6TRAS
     secret-key: V4Z1LKGjQXEsCV99VN7TM2sXMo34QnXEHHCXdXo1
     end-point: https://obs.cn-east-2.myhuaweicloud.com
+    bucket-name: obs-621e

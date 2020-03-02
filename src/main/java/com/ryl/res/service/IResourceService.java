@@ -2,6 +2,9 @@ package com.ryl.res.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ryl.res.model.entity.Resource;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @author: ryl
@@ -10,4 +13,5 @@ import com.ryl.res.model.entity.Resource;
  */
 public interface IResourceService extends IService<Resource> {
 
+    List<String> uploadFile(MultipartFile[] multipartFiles);
 }
