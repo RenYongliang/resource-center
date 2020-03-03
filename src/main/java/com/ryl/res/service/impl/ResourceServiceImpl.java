@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ryl.res.mapper.ResourceMapper;
 import com.ryl.res.model.entity.Resource;
 import com.ryl.res.service.IResourceService;
-import com.ryl.res.util.ObsClientUtil;
+import com.ryl.res.config.obs.ObsClientUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

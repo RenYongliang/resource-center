@@ -1,10 +1,11 @@
-package com.ryl.res.util;
+package com.ryl.res.config.obs;
 
 import com.obs.services.ObsClient;
 import com.obs.services.model.PutObjectResult;
 import com.ryl.res.enums.FileTypeEnum;
 import com.ryl.res.model.entity.Resource;
 import com.ryl.res.service.IResourceService;
+import com.ryl.res.util.SnowflakeIdGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

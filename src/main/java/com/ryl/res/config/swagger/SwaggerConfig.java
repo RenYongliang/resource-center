@@ -1,4 +1,4 @@
-package com.ryl.res.config;
+package com.ryl.res.config.swagger;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;
