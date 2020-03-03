@@ -22,8 +22,8 @@ public class UserController {
     @ApiOperation("用户登录")
     public String login(String username,String password){
         //数据库记录返回userId
-        Long userd = 999L;
-        return JwtTokenUtil.generateJwtToken(userd.toString());
+        Long userId = 999L;
+        return JwtTokenUtil.generateJwtToken(userId.toString());
     }
 
     @PostMapping("/getJwtUser")
