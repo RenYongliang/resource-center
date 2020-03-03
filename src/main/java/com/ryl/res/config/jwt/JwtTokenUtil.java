@@ -1,9 +1,8 @@
 package com.ryl.res.config.jwt;
 
-import io.jsonwebtoken.Claims;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -17,7 +16,6 @@ import static com.ryl.res.config.jwt.JwtConfigParam.*;
  * @description: JWT token 工具类
  * @date: 2020-03-03 09:21:07
  */
-@Component
 public class JwtTokenUtil {
 
     /**
@@ -39,7 +37,7 @@ public class JwtTokenUtil {
                 .setClaims(claimsMap)
                 .setSubject(JWT_SUBJECT)
                 .setExpiration(expireDate)
-                .signWith(SignatureAlgorithm.HS512, TOKEN_SECRET)
+                .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
         return new StringBuilder().append(TOKEN_PREFIX_TYPE).append(" ").append(jwt).toString();
     }
@@ -61,7 +59,7 @@ public class JwtTokenUtil {
                 .setClaims(claimsMap)
                 .setSubject(JWT_SUBJECT)
                 .setExpiration(expireDate)
-                .signWith(SignatureAlgorithm.HS512, TOKEN_SECRET)
+                .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
         return new StringBuilder().append(TOKEN_PREFIX_TYPE).append(" ").append(jwt).toString();
     }
@@ -72,10 +70,14 @@ public class JwtTokenUtil {
      * @return
      */
     public static JwtUser parseJwtToken(String token){
-        Claims claims = Jwts.parser()
-                .setSigningKey(TOKEN_SECRET.getBytes())
+        //去除前缀 Bearer
+        token = token.substring(7);
+        Object o = Jwts.parser()
+                .setSigningKey(SECRET)
                 .parseClaimsJws(token)
-                .getBody();
-        return (JwtUser) claims.get(CLAIMS_KEY);
+                .getBody()
+                .get(CLAIMS_KEY);
+        //转成JwtUser对象
+        return new ObjectMapper().convertValue(o,JwtUser.class);
     }
 }

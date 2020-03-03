@@ -19,4 +19,5 @@ public class JwtUser {
      * 用户姓名
      */
     private String userName;
+
 }

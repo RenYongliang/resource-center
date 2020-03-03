@@ -19,6 +19,9 @@ logback:
   level: debug
   path: /opt/product
   layout: '%d{YY-mm-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n'
+jwt:
+  secret: 3306wdnss^rylCoder
+  expire-time: 7
 huaweiyun:
   obs:
     access-key: MTMDAN7TXAWZWLU6TRAS

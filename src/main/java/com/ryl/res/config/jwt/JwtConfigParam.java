@@ -15,10 +15,10 @@ public class JwtConfigParam {
     /**
      * 密匙key
      */
-    public static final String TOKEN_SECRET = "3306wdnss^rylCoder";
+    public static final String SECRET = "3306wdnss^rylCoder";
 
     /**
-     * 过期时间 10天
+     * 过期时间 7天
      */
     public static final int EXPIRE_TIME = 7;
 
