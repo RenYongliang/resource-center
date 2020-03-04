@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Data
 @ConfigurationProperties(prefix = "huaweiyun.obs")
 @Component
-public class ObsConfigParam {
+public class ObsProperties {
 
     /**
      * accessKey

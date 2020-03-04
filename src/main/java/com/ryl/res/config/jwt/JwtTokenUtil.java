@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.ryl.res.config.jwt.JwtConfigParam.*;
+import static com.ryl.res.config.jwt.JwtProperties.*;
 
 /**
  * @author: ryl
@@ -26,7 +26,8 @@ public class JwtTokenUtil {
     public static String generateJwtToken(String userGuid) {
         // expireDate 7天
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, EXPIRE_TIME);
+//        calendar.add(Calendar.DATE, EXPIRE_TIME);
+        calendar.add(Calendar.SECOND, 10);
         Date expireDate = calendar.getTime();
         //载荷信息 存放user对象
         Map<String, Object> claimsMap = new HashMap<>(1);

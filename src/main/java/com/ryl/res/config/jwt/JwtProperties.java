@@ -5,7 +5,7 @@ package com.ryl.res.config.jwt;
  * @description: jwt参数配置类
  * @date: 2020-03-03 09:26:39
  */
-public class JwtConfigParam {
+public class JwtProperties {
 
     /**
      *  存放Token的Header Key
