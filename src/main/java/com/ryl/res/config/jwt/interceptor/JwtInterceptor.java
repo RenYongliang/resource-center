@@ -25,12 +25,14 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
         String reqPath = request.getServletPath();
         //Header
         String authHeader = request.getHeader("Authorization");
-//        if(authHeader == null) {
-//            return false;
-//        }
-//        if(!authHeader.startsWith("Bearer ")) {
-//            return false;
-//        }
+        if(authHeader == null) {
+            response.setStatus(901);
+            return false;
+        }
+        if(!authHeader.startsWith("Bearer ")) {
+            response.setStatus(801);
+            return false;
+        }
 
         //解析token
         Jwts.parser()
