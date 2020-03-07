@@ -1,14 +1,11 @@
 package com.ryl.res.config.jwt.interceptor;
 
-import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import static com.ryl.res.config.jwt.JwtProperties.SECRET;
 
 /**
  * @author: ryl
@@ -21,23 +18,23 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        //请求接口
-        String reqPath = request.getServletPath();
-        //Header
-        String authHeader = request.getHeader("Authorization");
-        if(authHeader == null) {
-            response.setStatus(901);
-            return false;
-        }
-        if(!authHeader.startsWith("Bearer ")) {
-            response.setStatus(801);
-            return false;
-        }
-
-        //解析token
-        Jwts.parser()
-                .setSigningKey(SECRET)
-                .parseClaimsJws(authHeader.substring(7));
+//        //请求接口
+//        String reqPath = request.getServletPath();
+//        //Header
+//        String authHeader = request.getHeader(HEADER_KEY);
+//        if(authHeader == null) {
+//            response.setStatus(901);
+//            return false;
+//        }
+//        if(!authHeader.startsWith(TOKEN_PREFIX_TYPE)) {
+//            response.setStatus(801);
+//            return false;
+//        }
+//
+//        //解析token
+//        Jwts.parser()
+//                .setSigningKey(SECRET)
+//                .parseClaimsJws(authHeader.substring(TOKEN_PREFIX_TYPE.length()));
 
         return true;
     }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,8 +27,7 @@ public class JwtTokenUtil {
     public static String generateJwtToken(String userGuid) {
         // expireDate 7天
         Calendar calendar = Calendar.getInstance();
-//        calendar.add(Calendar.DATE, EXPIRE_TIME);
-        calendar.add(Calendar.SECOND, 10);
+        calendar.add(Calendar.DATE, EXPIRE_TIME);
         Date expireDate = calendar.getTime();
         //载荷信息 存放user对象
         Map<String, Object> claimsMap = new HashMap<>(1);
@@ -40,7 +40,7 @@ public class JwtTokenUtil {
                 .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
-        return new StringBuilder().append(TOKEN_PREFIX_TYPE).append(" ").append(jwt).toString();
+        return new StringBuilder().append(TOKEN_PREFIX_TYPE).append(jwt).toString();
     }
 
     /**
@@ -62,17 +62,34 @@ public class JwtTokenUtil {
                 .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
-        return new StringBuilder().append(TOKEN_PREFIX_TYPE).append(" ").append(jwt).toString();
+        return new StringBuilder().append(TOKEN_PREFIX_TYPE).append(jwt).toString();
     }
 
     /**
-     * 解析token
+     * 传token获取jwtUser
      * @param token
      * @return
      */
-    public static JwtUser parseJwtToken(String token){
+    public static JwtUser getJwtUser(String token){
         //去除前缀 Bearer
-        token = token.substring(7);
+        token = token.substring(TOKEN_PREFIX_TYPE.length());
+        Object o = Jwts.parser()
+                .setSigningKey(SECRET)
+                .parseClaimsJws(token)
+                .getBody()
+                .get(CLAIMS_KEY);
+        //转成JwtUser对象
+        return new ObjectMapper().convertValue(o,JwtUser.class);
+    }
+
+    /**
+     * 传httpRequest获取jwtUser
+     * @param request
+     * @return
+     */
+    public static JwtUser getJwtUser(HttpServletRequest request){
+        //header获取token并去除前缀 Bearer
+        String token = request.getHeader(HEADER_KEY).substring(TOKEN_PREFIX_TYPE.length());
         Object o = Jwts.parser()
                 .setSigningKey(SECRET)
                 .parseClaimsJws(token)

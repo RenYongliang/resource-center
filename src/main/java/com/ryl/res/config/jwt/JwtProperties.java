@@ -25,7 +25,7 @@ public class JwtProperties {
     /**
      * header token 前缀
      */
-    public static final String TOKEN_PREFIX_TYPE = "Bearer";
+    public static final String TOKEN_PREFIX_TYPE = "Bearer ";
 
     /**
      * playLoad 载荷信息KEY

@@ -10,6 +10,11 @@ spring:
     multipart:
       max-request-size: 100MB
       max-file-size: 500MB
+  redis:
+    port: 6379
+    host: 120.76.128.254
+    timeout: 10000
+    password: ryl123
 mybatis-plus:
   mapper-locations: classpath*:com\ryl\res\mapper\**\*.xml
   configuration:
