@@ -25,9 +25,9 @@ public class JwtTokenUtil {
      * @return
      */
     public static String generateJwtToken(String userGuid) {
-        // expireDate 7天
+        // expireDate 2小时
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, EXPIRE_TIME);
+        calendar.add(Calendar.HOUR, EXPIRE_TIME);
         Date expireDate = calendar.getTime();
         //载荷信息 存放user对象
         Map<String, Object> claimsMap = new HashMap<>(1);
@@ -49,9 +49,9 @@ public class JwtTokenUtil {
      * @return
      */
     public static String generateJwtToken(JwtUser jwtUser) {
-        // expireDate 7天
+        // expireDate 2小时
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, EXPIRE_TIME);
+        calendar.add(Calendar.HOUR, EXPIRE_TIME);
         Date expireDate = calendar.getTime();
         //载荷信息 存放user对象
         Map<String, Object> claimsMap = new HashMap<>(1);

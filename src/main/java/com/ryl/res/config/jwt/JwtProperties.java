@@ -18,9 +18,9 @@ public class JwtProperties {
     public static final String SECRET = "3306wdnss^rylCoder";
 
     /**
-     * 过期时间 7天
+     * 过期时间 2小时
      */
-    public static final int EXPIRE_TIME = 7;
+    public static final int EXPIRE_TIME = 2;
 
     /**
      * header token 前缀
