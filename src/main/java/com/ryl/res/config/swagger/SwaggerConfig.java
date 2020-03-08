@@ -1,6 +1,7 @@
 package com.ryl.res.config.swagger;
 
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -19,23 +20,26 @@ import springfox.documentation.spring.web.plugins.Docket;
 @Configuration
 public class SwaggerConfig {
 
+    @Autowired
+    private SwaggerProperties swaggerProperties;
+
     @Bean
     public Docket createRestApi() {
-        return new Docket(DocumentationType.SWAGGER_2).groupName("资源中心")
+        return new Docket(DocumentationType.SWAGGER_2).groupName(swaggerProperties.getGroupName())
                 .apiInfo(apiInfo())
                 .select().apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
-                .apis(RequestHandlerSelectors.basePackage("com.ryl.res.controller"))
+                .apis(RequestHandlerSelectors.basePackage(swaggerProperties.getBasePackage()))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
-        Contact contact = new Contact("yongliang.ren", "", "1017632646@qq.com");
+        Contact contact = new Contact(swaggerProperties.getContactName(), swaggerProperties.getContactUrl(), swaggerProperties.getContactEmail());
         return new ApiInfoBuilder()
-                .title("资源中心 API")
-                .description("")
+                .title(swaggerProperties.getTitle())
+                .description(swaggerProperties.getDescription())
                 .contact(contact)
-                .version("SNAPSHOT-0.1")
+                .version(swaggerProperties.getVersion())
                 .build();
     }
 }
