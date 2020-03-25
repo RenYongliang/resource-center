@@ -1,39 +1,74 @@
 package com.ryl.res.config.jwt;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 /**
  * @author: ryl
  * @description: jwt参数配置类
  * @date: 2020-03-03 09:26:39
  */
+@Component
 public class JwtProperties {
 
     /**
      *  存放Token的Header Key
      */
-    public static final String HEADER_KEY = "Authorization";
+    public static String HEADER_KEY;
 
     /**
      * 密匙key
      */
-    public static final String SECRET = "3306wdnss^rylCoder";
+    public static  String SECRET;
 
     /**
      * 过期时间 2小时
      */
-    public static final int EXPIRE_TIME = 2;
+    public static int EXPIRE_TIME;
 
     /**
      * header token 前缀
      */
-    public static final String TOKEN_PREFIX_TYPE = "Bearer ";
+    public static String TOKEN_PREFIX_TYPE;
 
     /**
      * playLoad 载荷信息KEY
      */
-    public static final String CLAIMS_KEY = "user";
+    public static String CLAIMS_KEY ;
 
     /**
      * JWT主体信息 区分微信端和管理端
      */
-    public static final String JWT_SUBJECT = "ryl_jwt_subject";
+    public static String JWT_SUBJECT;
+
+
+    @Value("${jwt.header-key:Authorization}")
+    public void setHeaderKey(String headerKey){
+        HEADER_KEY = headerKey;
+    }
+
+    @Value("${jwt.secret:3306wdnss^rylCoder}")
+    public void setSecret(String secret){
+        SECRET = secret;
+    }
+
+    @Value("${jwt.expire-time:2}")
+    public void setExpireTime(int expireTime){
+        EXPIRE_TIME = expireTime;
+    }
+
+    @Value("${jwt.token-prefix-type:Bearer }")
+    public void setTokenPrefixType(String tokenPrefixType){
+        TOKEN_PREFIX_TYPE = tokenPrefixType;
+    }
+
+    @Value("${jwt.claims-key:user}")
+    public void setClaimsKey(String claimsKey){
+        CLAIMS_KEY = claimsKey;
+    }
+
+    @Value("${jwt.jwt-subject:ryl_jwt_subject}")
+    public void setJwtSubject(String jwtSubject){
+        JWT_SUBJECT = jwtSubject;
+    }
 }

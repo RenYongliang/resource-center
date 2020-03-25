@@ -47,4 +47,5 @@ public class UserController {
     public List<Resource> list(){
         return iResourceService.userList();
     }
+
 }

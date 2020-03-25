@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8088
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -15,6 +15,14 @@ spring:
     host: 120.76.128.254
     timeout: 10000
     password: ryl123
+#jwt:
+#  header-key:
+#  secret:
+#  expire-time:
+#  token-prefix-type:
+#  claims-key:
+#  jwt-subject:
+
 mybatis-plus:
   mapper-locations: classpath*:com\ryl\res\mapper\**\*.xml
   configuration:
