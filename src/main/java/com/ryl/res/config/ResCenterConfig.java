@@ -10,6 +10,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author: ryl
  * @description:
@@ -23,7 +26,11 @@ public class ResCenterConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(jwtInterceptor).addPathPatterns("/**");
+        List<String> excludeUrls = new ArrayList<>();
+        excludeUrls.add("/swagger-resources");
+        excludeUrls.add("/v2/api-docs");
+        registry.addInterceptor(jwtInterceptor).addPathPatterns("/**")
+                .excludePathPatterns(excludeUrls);
     }
 
     @Bean
