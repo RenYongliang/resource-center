@@ -41,6 +41,11 @@ public class JwtProperties {
      */
     public static String JWT_SUBJECT;
 
+    /**
+     * JWT白名单
+     */
+    public static String JWT_WHITE_LIST;
+
 
     @Value("${jwt.header-key:Authorization}")
     public void setHeaderKey(String headerKey){
@@ -70,5 +75,10 @@ public class JwtProperties {
     @Value("${jwt.jwt-subject:ryl_jwt_subject}")
     public void setJwtSubject(String jwtSubject){
         JWT_SUBJECT = jwtSubject;
+    }
+
+    @Value("${jwt.white-list:/user/login;}")
+    public void setJwtWhiteList(String jwtWhiteList){
+        JWT_WHITE_LIST = jwtWhiteList;
     }
 }

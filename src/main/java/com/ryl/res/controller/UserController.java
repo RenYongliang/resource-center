@@ -7,11 +7,14 @@ import com.ryl.res.service.IResourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -27,9 +30,14 @@ public class UserController {
     @Autowired
     private IResourceService iResourceService;
 
-    @PostMapping("/login")
+    private static final BCryptPasswordEncoder B_CRYPT_PASSWORD_ENCODER = new BCryptPasswordEncoder();
+
+    @GetMapping("/login")
     @ApiOperation("用户登录")
-    public String login(String username,String password){
+    public String login(HttpServletRequest request, HttpServletResponse response, String username, String password){
+        String token = request.getHeader("authorization");
+        response.setHeader("name","ryl");
+        B_CRYPT_PASSWORD_ENCODER.encode(password);//密码加密
         //数据库记录返回userId
         Long userId = 999L;
         return JwtTokenUtil.generateJwtToken(userId.toString());
