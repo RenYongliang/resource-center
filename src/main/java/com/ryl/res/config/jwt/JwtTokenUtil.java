@@ -25,22 +25,9 @@ public class JwtTokenUtil {
      * @return
      */
     public static String generateJwtToken(String userGuid) {
-        // expireDate 2小时
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR, EXPIRE_TIME);
-        Date expireDate = calendar.getTime();
-        //载荷信息 存放user对象
-        Map<String, Object> claimsMap = new HashMap<>(1);
         JwtUser jwtUser = new JwtUser();
         jwtUser.setUserId(userGuid);
-        claimsMap.put(CLAIMS_KEY, jwtUser);
-        String jwt = Jwts.builder()
-                .setClaims(claimsMap)
-                .setSubject(JWT_SUBJECT)
-                .setExpiration(expireDate)
-                .signWith(SignatureAlgorithm.HS512, SECRET)
-                .compact();
-        return new StringBuilder().append(TOKEN_PREFIX_TYPE).append(jwt).toString();
+        return generateJwtToken(jwtUser);
     }
 
     /**
@@ -66,6 +53,17 @@ public class JwtTokenUtil {
     }
 
     /**
+     * 传httpRequest获取jwtUser
+     * @param request
+     * @return
+     */
+    public static JwtUser getJwtUser(HttpServletRequest request){
+        //header获取token
+        String token = request.getHeader(HEADER_KEY);
+        return getJwtUser(token);
+    }
+
+    /**
      * 传token获取jwtUser
      * @param token
      * @return
@@ -82,20 +80,4 @@ public class JwtTokenUtil {
         return new ObjectMapper().convertValue(o,JwtUser.class);
     }
 
-    /**
-     * 传httpRequest获取jwtUser
-     * @param request
-     * @return
-     */
-    public static JwtUser getJwtUser(HttpServletRequest request){
-        //header获取token并去除前缀 Bearer
-        String token = request.getHeader(HEADER_KEY).substring(TOKEN_PREFIX_TYPE.length());
-        Object o = Jwts.parser()
-                .setSigningKey(SECRET)
-                .parseClaimsJws(token)
-                .getBody()
-                .get(CLAIMS_KEY);
-        //转成JwtUser对象
-        return new ObjectMapper().convertValue(o,JwtUser.class);
-    }
 }

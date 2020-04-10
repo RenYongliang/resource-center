@@ -24,7 +24,7 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         //请求接口名称
         String reqPath = request.getServletPath();
-        //在报名单内就放行
+        //在白名单内就放行
         String[] urls = JWT_WHITE_LIST.split(";");
         if (Arrays.asList(urls).contains(reqPath)) {
             return true;
