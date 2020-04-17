@@ -1,6 +1,9 @@
 package com.ryl.res.config.jwt;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 /**
  * @author: ryl
@@ -19,5 +22,8 @@ public class JwtUser {
      * 用户姓名
      */
     private String username;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+    private LocalDateTime localDateTime;
 
 }

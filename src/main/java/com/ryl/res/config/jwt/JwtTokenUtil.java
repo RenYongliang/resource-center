@@ -49,7 +49,7 @@ public class JwtTokenUtil {
                 .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
-        return new StringBuilder().append(TOKEN_PREFIX_TYPE).append(jwt).toString();
+        return jwt;
     }
 
     /**

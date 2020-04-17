@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -40,7 +41,10 @@ public class UserController {
         B_CRYPT_PASSWORD_ENCODER.encode(password);//密码加密
         //数据库记录返回userId
         Long userId = 999L;
-        return JwtTokenUtil.generateJwtToken(userId.toString());
+        JwtUser jwtUser = new JwtUser();
+        jwtUser.setUsername("asdbas");
+        jwtUser.setLocalDateTime(LocalDateTime.now());
+        return JwtTokenUtil.generateJwtToken(jwtUser);
     }
 
     @PostMapping("/getJwtUser")
@@ -54,6 +58,11 @@ public class UserController {
     @ApiOperation("用户列表")
     public List<Resource> list(){
         return iResourceService.userList();
+    }
+
+
+    public static void main(String[] args) {
+        System.out.println();
     }
 
 }
