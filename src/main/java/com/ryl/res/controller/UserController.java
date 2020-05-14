@@ -2,10 +2,13 @@ package com.ryl.res.controller;
 
 import com.ryl.res.config.jwt.JwtTokenUtil;
 import com.ryl.res.config.jwt.JwtUser;
+import com.ryl.res.model.dto.MessageDTO;
 import com.ryl.res.model.entity.Resource;
+import com.ryl.res.model.entity.User;
 import com.ryl.res.service.IResourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,12 +33,23 @@ public class UserController {
 
     @Autowired
     private IResourceService iResourceService;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     private static final BCryptPasswordEncoder B_CRYPT_PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     @GetMapping("/login")
     @ApiOperation("用户登录")
     public String login(HttpServletRequest request, HttpServletResponse response, String username, String password){
+        User user = new User();
+        user.setName("zhangsan");
+        user.setUserId(1L);
+        user.setPhone("17858951479");
+        MessageDTO<User> messageDTO = new MessageDTO<>();
+        messageDTO.setMessageData(user);
+        messageDTO.setCreateTime(LocalDateTime.now());
+        rabbitTemplate.setChannelTransacted(true);
+        rabbitTemplate.convertAndSend("testDirectExchange","testDirectRouting",messageDTO);
         String token = request.getHeader("authorization");
         response.setHeader("name","ryl");
         B_CRYPT_PASSWORD_ENCODER.encode(password);//密码加密
@@ -43,7 +57,6 @@ public class UserController {
         Long userId = 999L;
         JwtUser jwtUser = new JwtUser();
         jwtUser.setUsername("asdbas");
-        jwtUser.setLocalDateTime(LocalDateTime.now());
         return JwtTokenUtil.generateJwtToken(jwtUser);
     }
 

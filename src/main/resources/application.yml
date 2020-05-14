@@ -15,6 +15,13 @@ spring:
     host: 120.76.128.254
     timeout: 10000
     password: ryl123
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: root
+    password: ryl123
+    #虚拟host 可以不设置,使用server默认host
+    virtual-host: /ryl
 #jwt:
 #  header-key:
 #  secret:
