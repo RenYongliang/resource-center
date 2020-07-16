@@ -16,81 +16,62 @@ public class ResultModel<T> implements Serializable {
     private Integer status;
     private T data;
 
-    public ResultModel() {
-        this.status = ResultStatus.SUCCESS.getCode();
-    }
-
-    public ResultModel(boolean success, Integer status, String message, T data) {
-        this.success = success;
-        this.status = status;
-        this.message = message;
-        this.data = data;
-    }
-
-    public ResultModel(ResultStatus resultStatus) {
-        this.success = true;
-        this.status = resultStatus.getCode();
-        this.message = resultStatus.getMessage();
-    }
-
-    public ResultModel(ResultStatus resultStatus, String message) {
-        this.success = resultStatus.getCode().equals(200) ? true : false;
-        this.status = resultStatus.getCode();
+    private ResultModel(Integer code, String message) {
+        this.success = code.equals(200) ? true : false;
+        this.status = code;
         this.message = message;
     }
 
-    public ResultModel(ResultStatus resultStatus, T data) {
-        this.success = resultStatus.getCode().equals(200) ? true : false;
-        this.status = resultStatus.getCode();
-        this.message = resultStatus.getMessage();
-        this.data = data;
-    }
-
-    public ResultModel(ResultStatus resultStatus, T data, String message) {
-        this.success = resultStatus.getCode().equals(200) ? true : false;
-        this.status = resultStatus.getCode();
+    private ResultModel(Integer code, String message, T data) {
+        this.success = code.equals(200) ? true : false;
+        this.status = code;
         this.message = message;
         this.data = data;
     }
 
     public static ResultModel success() {
-        return new ResultModel(ResultStatus.SUCCESS);
+        return new ResultModel(ResultStatus.SUCCESS.getCode(), ResultStatus.SUCCESS.getMessage());
     }
 
     public static ResultModel success(String message) {
-        return new ResultModel(ResultStatus.SUCCESS,message);
+        return new ResultModel(ResultStatus.SUCCESS.getCode(), message);
     }
 
     public static <T> ResultModel success(T data) {
-        return new ResultModel(ResultStatus.SUCCESS,data);
+        return new ResultModel(ResultStatus.SUCCESS.getCode(), ResultStatus.SUCCESS.getMessage(), data);
     }
 
     public static <T> ResultModel success(T data, String message) {
-        return new ResultModel(ResultStatus.SUCCESS, data, message);
+        return new ResultModel(ResultStatus.SUCCESS.getCode(), message, data);
     }
 
+
     public static ResultModel fail() {
-        return new ResultModel(ResultStatus.FAILURE);
+        return new ResultModel(ResultStatus.FAILURE.getCode(), ResultStatus.FAILURE.getMessage());
     }
 
     public static ResultModel fail(String message) {
-        return new ResultModel(ResultStatus.FAILURE,message);
+        return new ResultModel(ResultStatus.FAILURE.getCode(), message);
+    }
+
+    protected static ResultModel fail(Integer code, String message) {
+        return new ResultModel(code, message);
     }
 
     public static <T> ResultModel fail(T data) {
-        return new ResultModel(ResultStatus.FAILURE,data);
+        return new ResultModel(ResultStatus.FAILURE.getCode(), ResultStatus.FAILURE.getMessage(), data);
     }
 
     public static <T> ResultModel fail(T data, String message) {
-        return new ResultModel(ResultStatus.FAILURE, data, message);
+        return new ResultModel(ResultStatus.FAILURE.getCode(), message, data);
     }
 
-    public static <T> ResultModel fail(ResultStatus resultStatus, T data) {
-        return new ResultModel(resultStatus, data);
+    public static ResultModel fail(ResultStatus resultStatus) {
+        return new ResultModel(resultStatus.getCode(), resultStatus.getMessage());
     }
 
-    public static <T> ResultModel fail(ResultStatus resultStatus, T data, String message) {
-        return new ResultModel(resultStatus, data, message);
+    public static <T> ResultModel fail(T data, ResultStatus resultStatus) {
+        return new ResultModel(resultStatus.getCode(), resultStatus.getMessage(), data);
     }
 
     public T getData() {
