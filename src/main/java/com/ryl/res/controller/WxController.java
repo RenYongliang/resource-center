@@ -53,7 +53,7 @@ public class WxController {
 //        accParams.put("secret",WxConfigConstant.APP_SECRET);
 //        accParams.put("code",code);
 //        accParams.put("grant_type", WxConfigConstant.AUTH_GRANT_TYPE);
-//        ResponseEntity<String> accessRes = restTemplate.getForEntity(WxApiUrlConstant.CODE_2_ACCESS_TOKEN_URL, String.class, accParams);
+//        ResultModel<String> accessRes = restTemplate.getForEntity(WxApiUrlConstant.CODE_2_ACCESS_TOKEN_URL, String.class, accParams);
 //        JSONObject accessObj = JSON.parseObject(accessRes.getBody());
 //        String accessToken = (String) accessObj.get("access_token");
 //        String openId = (String) accessObj.get("openid");
@@ -62,7 +62,7 @@ public class WxController {
 //        Map<String,String> userParams = new HashMap<>();
 //        userParams.put("access_token",accessToken);
 //        userParams.put("openid",openId);
-//        ResponseEntity<String> userRes = restTemplate.getForEntity(WxApiUrlConstant.USER_INFO_URL, String.class, userParams);
+//        ResultModel<String> userRes = restTemplate.getForEntity(WxApiUrlConstant.USER_INFO_URL, String.class, userParams);
 //        JSONObject userObj = JSON.parseObject(userRes.getBody());
 //
 //    }

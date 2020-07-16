@@ -5,7 +5,7 @@ package com.ryl.res.base;
  * @description:
  * @date: 2020-07-16 10:30:20
  */
-public enum ResponseState {
+public enum ResultStatus {
     SUCCESS(200, "成功"),
     FAILURE(102, "失败"),
     USER_NEED_AUTHORITIES(201, "用户未登录"),
@@ -25,7 +25,7 @@ public enum ResponseState {
     private Integer code;
     private String message;
 
-    ResponseState(Integer code, String message) {
+    ResultStatus(Integer code, String message) {
         this.code = code;
         this.message = message;
     }

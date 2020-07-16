@@ -1,5 +1,6 @@
 package com.ryl.res.controller;
 
+import com.ryl.res.base.ResultModel;
 import com.ryl.res.config.jwt.JwtTokenUtil;
 import com.ryl.res.config.jwt.JwtUser;
 import com.ryl.res.model.dto.MessageDTO;
@@ -40,7 +41,7 @@ public class UserController {
 
     @GetMapping("/login")
     @ApiOperation("用户登录")
-    public String login(HttpServletRequest request, HttpServletResponse response, String username, String password){
+    public ResultModel<String> login(HttpServletRequest request, HttpServletResponse response, String username, String password){
         User user = new User();
         user.setName("zhangsan");
         user.setUserId(1L);
@@ -57,7 +58,7 @@ public class UserController {
         Long userId = 999L;
         JwtUser jwtUser = new JwtUser();
         jwtUser.setUsername("asdbas");
-        return JwtTokenUtil.generateJwtToken(jwtUser);
+        return ResultModel.success(JwtTokenUtil.generateJwtToken(jwtUser));
     }
 
     @PostMapping("/getJwtUser")
