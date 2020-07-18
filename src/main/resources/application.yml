@@ -22,6 +22,10 @@ spring:
     password: ryl123
     #虚拟host 可以不设置,使用server默认host
     virtual-host: /ryl
+  jackson:
+  generator:
+    parent: com.ryl
+    module: res
 #jwt:
 #  header-key:
 #  secret:

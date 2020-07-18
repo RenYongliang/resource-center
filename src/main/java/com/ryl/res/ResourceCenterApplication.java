@@ -9,7 +9,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
 @MapperScan(basePackages = {"com.ryl.res.mapper"})
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.ryl"})
 public class ResourceCenterApplication {
 
     public static void main(String[] args) {
