@@ -7,7 +7,6 @@ import com.ryl.res.model.entity.Resource;
 import com.ryl.res.service.IResourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,8 +28,6 @@ public class UserController {
 
     @Autowired
     private IResourceService iResourceService;
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
 
     private static final BCryptPasswordEncoder B_CRYPT_PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
