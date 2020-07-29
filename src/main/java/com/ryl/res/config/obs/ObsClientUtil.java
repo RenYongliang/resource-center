@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * @author: ryl
@@ -43,8 +43,12 @@ public class ObsClientUtil {
      * @return
      */
     public List<String> parallelUpload(MultipartFile[] multipartFiles) {
-        List<String> urlList = new Vector<>();
-        List<Resource> resourceList = new Vector<>();
+        List<String> urlList = Collections.synchronizedList(new ArrayList<>());
+        List<Resource> resourceList = new ArrayList<>();
+        CyclicBarrier barrier = new CyclicBarrier(multipartFiles.length,()->{
+            //等待所有子线程执行完毕后,记录插库
+            iResourceService.saveBatch(resourceList);
+        });
         ExecutorService es = Executors.newCachedThreadPool();
         for (MultipartFile file : multipartFiles) {
             es.execute(() -> {
@@ -78,12 +82,18 @@ public class ObsClientUtil {
                         .setResourceUrl(result.getObjectUrl());
 
                 resourceList.add(resource);
+                try {
+                    barrier.await(1, TimeUnit.HOURS);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (BrokenBarrierException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                }
             });
         }
-        //等待所有子线程执行完毕
-        while (urlList.size() < multipartFiles.length){}
-        //记录插库
-        iResourceService.saveBatch(resourceList);
+
         return urlList;
     }
 
