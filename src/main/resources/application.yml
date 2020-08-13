@@ -22,6 +22,22 @@ spring:
     password: ryl123
     #虚拟host 可以不设置,使用server默认host
     virtual-host: /ryl
+    publisher-confirm-type: correlated  # 消息发送确认,必须配置这个才会确认回调
+    publisher-returns: true  # 开启发送失败退回
+    listener:
+      simple:
+        acknowledge-mode: manual
+        prefetch: 2 # 一次请求中预处理的消息数量
+        concurrency: 1 # 消费端最小并发数(同一个队列启动几个消费者)
+        max-concurrency: 5 # 消费端最大并发数(同一个队列最多启动几个消费者)
+        retry:
+          enabled: true
+          max-attempts: 5
+          stateless: false
+          multiplier: 1.0
+          initial-interval: 1000ms
+          max-interval: 10000ms
+        default-requeue-rejected: false
   jackson:
   generator:
     parent: com.ryl

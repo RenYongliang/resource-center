@@ -1,15 +1,8 @@
 package com.ryl.res.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.ryl.ea.meeting.entity.ReJuan;
-import com.ryl.ea.meeting.service.TestService;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import com.ryl.res.mq.producer.HelloSender1;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,19 +10,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,111 +25,114 @@ import java.util.Map;
  * @date: 2019-07-25 10:59:06
  */
 @RestController
+@Api(tags = "PracticeController")
 public class PracticeController {
 
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
-    private TestService testService;
-
-
-    /**
-     * POST请求存放参数的Map必须是MultiValueMap,Map和HashMap都不行,被调用方参数接收会是null
-     * GET请求存放参数的Map是HashMap,
-     * 如果使用MultiValueMap,参数会加上[],比如username传ryl,被调用方接收到的参数为[ryl];
-     * 注意POST和GET的参数顺序
-     */
-
-    @PostMapping("/import")
-    public void importExcel() throws IOException {
-        XSSFWorkbook workbook = new XSSFWorkbook("上海有色.xlsx");
-        XSSFSheet sheet = workbook.getSheetAt(0);
-        List<ReJuan> reJuanList = new ArrayList<>();
-        for (int i = 0; i < sheet.getLastRowNum(); i++) {
-            XSSFRow row = sheet.getRow(i+1);
-            if (row != null) {
-                ReJuan reJuan = new ReJuan();
-                //名称
-                String name = getCellValue(row,0);
-                //材质
-                String material = getCellValue(row,1);
-                //规格
-                String spec = getCellValue(row,2);
-                //产地
-                String place = getCellValue(row,3);
-                //价格
-                String _price = getCellValue(row,4);
-                BigDecimal price = new BigDecimal(_price);
-                //涨跌
-                String _trend = getCellValue(row,5);
-                Integer trend = Integer.valueOf(_trend);
-                //日期
-                String _date = getCellValue(row,6);
-                LocalDate date = LocalDate.parse(_date);
-
-                reJuan.setName(name);
-                reJuan.setMaterial(material);
-                reJuan.setSpec(spec);
-                reJuan.setPlace(place);
-                reJuan.setPrice(price);
-                reJuan.setTrend(trend);
-                reJuan.setDate(date);
-                reJuanList.add(reJuan);
-            }
-        }
-        testService.insertEmployee(reJuanList);
-    }
-
-    private String getCellValue(Row row,int columnIndex) {
-        Cell cell = row.getCell(columnIndex);
-        if (cell != null) {
-            return cell.getStringCellValue();
-        }
-        return "";
-    }
-
-    @GetMapping("/login")
-    public String login(){
-        String str = postForObjectWithHeader1();
-        JSONObject jsonObject = JSON.parseObject(str);
-        JSONArray arr = (JSONArray) jsonObject.get("data");
-        XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet("组织机构");
-        String[] header = {"姓名","工号","性别","岗位名称","邮箱","手机","电话"};
-        XSSFRow row0 = sheet.createRow(0);
-        for (int i = 0; i< header.length; i++) {
-            row0.createCell(i).setCellValue(header[i]);
-        }
-        int j =1;
-        for (Object o : arr) {
-            String employeenamecn = ((String) ((JSONObject) o).get("employeenamecn"));
-            String employeecode = ((String) ((JSONObject) o).get("employeecode"));
-            String sexLable = ((String) ((JSONObject) o).get("sexLable"));
-            String stationLable = ((String) ((JSONObject) o).get("stationLable"));
-            String email = ((String) ((JSONObject) o).get("email"));
-            String mobile = ((String) ((JSONObject) o).get("mobile"));
-            String telephone = ((String) ((JSONObject) o).get("telephone"));
-
-            XSSFRow row = sheet.createRow(j);
-            row.createCell(0).setCellValue(employeenamecn);
-            row.createCell(1).setCellValue(employeecode);
-            row.createCell(2).setCellValue(sexLable);
-            row.createCell(3).setCellValue(stationLable);
-            row.createCell(4).setCellValue(email);
-            row.createCell(5).setCellValue(mobile);
-            row.createCell(6).setCellValue(telephone);
-
-            j++;
-        }
-        try {
-            FileOutputStream out = new FileOutputStream("组织机构.xlsx");
-            workbook.write(out);
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "ok";
-    }
+    private HelloSender1 helloSender1;
+//    @Autowired
+//    private TestService testService;
+//
+//
+//    /**
+//     * POST请求存放参数的Map必须是MultiValueMap,Map和HashMap都不行,被调用方参数接收会是null
+//     * GET请求存放参数的Map是HashMap,
+//     * 如果使用MultiValueMap,参数会加上[],比如username传ryl,被调用方接收到的参数为[ryl];
+//     * 注意POST和GET的参数顺序
+//     */
+//
+//    @PostMapping("/import")
+//    public void importExcel() throws IOException {
+//        XSSFWorkbook workbook = new XSSFWorkbook("上海有色.xlsx");
+//        XSSFSheet sheet = workbook.getSheetAt(0);
+//        List<ReJuan> reJuanList = new ArrayList<>();
+//        for (int i = 0; i < sheet.getLastRowNum(); i++) {
+//            XSSFRow row = sheet.getRow(i+1);
+//            if (row != null) {
+//                ReJuan reJuan = new ReJuan();
+//                //名称
+//                String name = getCellValue(row,0);
+//                //材质
+//                String material = getCellValue(row,1);
+//                //规格
+//                String spec = getCellValue(row,2);
+//                //产地
+//                String place = getCellValue(row,3);
+//                //价格
+//                String _price = getCellValue(row,4);
+//                BigDecimal price = new BigDecimal(_price);
+//                //涨跌
+//                String _trend = getCellValue(row,5);
+//                Integer trend = Integer.valueOf(_trend);
+//                //日期
+//                String _date = getCellValue(row,6);
+//                LocalDate date = LocalDate.parse(_date);
+//
+//                reJuan.setName(name);
+//                reJuan.setMaterial(material);
+//                reJuan.setSpec(spec);
+//                reJuan.setPlace(place);
+//                reJuan.setPrice(price);
+//                reJuan.setTrend(trend);
+//                reJuan.setDate(date);
+//                reJuanList.add(reJuan);
+//            }
+//        }
+//        testService.insertEmployee(reJuanList);
+//    }
+//
+//    private String getCellValue(Row row,int columnIndex) {
+//        Cell cell = row.getCell(columnIndex);
+//        if (cell != null) {
+//            return cell.getStringCellValue();
+//        }
+//        return "";
+//    }
+//
+//    @GetMapping("/login")
+//    public String login(){
+//        String str = postForObjectWithHeader1();
+//        JSONObject jsonObject = JSON.parseObject(str);
+//        JSONArray arr = (JSONArray) jsonObject.get("data");
+//        XSSFWorkbook workbook = new XSSFWorkbook();
+//        XSSFSheet sheet = workbook.createSheet("组织机构");
+//        String[] header = {"姓名","工号","性别","岗位名称","邮箱","手机","电话"};
+//        XSSFRow row0 = sheet.createRow(0);
+//        for (int i = 0; i< header.length; i++) {
+//            row0.createCell(i).setCellValue(header[i]);
+//        }
+//        int j =1;
+//        for (Object o : arr) {
+//            String employeenamecn = ((String) ((JSONObject) o).get("employeenamecn"));
+//            String employeecode = ((String) ((JSONObject) o).get("employeecode"));
+//            String sexLable = ((String) ((JSONObject) o).get("sexLable"));
+//            String stationLable = ((String) ((JSONObject) o).get("stationLable"));
+//            String email = ((String) ((JSONObject) o).get("email"));
+//            String mobile = ((String) ((JSONObject) o).get("mobile"));
+//            String telephone = ((String) ((JSONObject) o).get("telephone"));
+//
+//            XSSFRow row = sheet.createRow(j);
+//            row.createCell(0).setCellValue(employeenamecn);
+//            row.createCell(1).setCellValue(employeecode);
+//            row.createCell(2).setCellValue(sexLable);
+//            row.createCell(3).setCellValue(stationLable);
+//            row.createCell(4).setCellValue(email);
+//            row.createCell(5).setCellValue(mobile);
+//            row.createCell(6).setCellValue(telephone);
+//
+//            j++;
+//        }
+//        try {
+//            FileOutputStream out = new FileOutputStream("组织机构.xlsx");
+//            workbook.write(out);
+//            out.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return "ok";
+//    }
 
     /**
      ***************************************GET开始*********************************************
@@ -271,5 +261,10 @@ public class PracticeController {
         return urls;
     }
 
+    @PostMapping("/mqTest")
+    @ApiOperation("mq测试")
+    public void mqTest(@RequestParam("x") String x) {
+        helloSender1.send(x);
+    }
 
 }
