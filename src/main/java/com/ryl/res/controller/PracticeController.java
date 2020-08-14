@@ -1,8 +1,13 @@
 package com.ryl.res.controller;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
+import com.ryl.res.model.vo.ExportModel;
 import com.ryl.res.mq.producer.HelloSender1;
+import com.ryl.res.service.IPracticeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -16,7 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +41,8 @@ public class PracticeController {
     private RestTemplate restTemplate;
     @Autowired
     private HelloSender1 helloSender1;
+    @Autowired
+    private IPracticeService practiceService;
 //    @Autowired
 //    private TestService testService;
 //
@@ -265,6 +276,35 @@ public class PracticeController {
     @ApiOperation("mq测试")
     public void mqTest(@RequestParam("x") String x) {
         helloSender1.send(x);
+    }
+
+
+    /**
+     * easy-poi文档地址： http://doc.wupaas.com/docs/easypoi/easypoi-1c0u6ksp2r091
+     * @param response
+     */
+    @PostMapping("/mergeExportTest")
+    @ApiOperation("动态合并单元格导出测试")
+    public void mergeExportTest(HttpServletResponse response) {
+        List<ExportModel> list = practiceService.getModelData();
+        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams("标题", "sheet"), ExportModel.class, list);
+        try {
+            OutputStream os = response.getOutputStream();
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            workbook.write(os);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (workbook != null) {
+                try {
+                    workbook.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
     }
 
 }

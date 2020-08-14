@@ -1,8 +1,11 @@
 package com.ryl.res.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.api.ChannelAwareMessageListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -41,4 +44,45 @@ public class RabbitMqConfig {
         });
         return rabbitTemplate;
     }
+
+    @Bean
+    public SimpleMessageListenerContainer messageListenerContainer(ConnectionFactory connectionFactory){
+        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.setQueueNames("supply");              // 监听的队列
+        container.setAcknowledgeMode(AcknowledgeMode.MANUAL);        // 手动确认
+        container.setMessageListener((ChannelAwareMessageListener) (message, channel) -> {      //消息处理
+            System.out.println("====接收到消息=====");
+            System.out.println(new String(message.getBody()));
+            if(message.getMessageProperties().getHeader("error") == null){
+                channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
+                System.out.println("消息已经确认");
+            }else {
+                //channel.basicNack(message.getMessageProperties().getDeliveryTag(),false,false);
+                channel.basicReject(message.getMessageProperties().getDeliveryTag(),false);
+                System.out.println("消息拒绝");
+            }
+
+        });
+        return container;
+    }
+
+//    @Bean
+//    public SimpleMessageListenerContainer messageListenerContainer(ConnectionFactory connectionFactory) {
+//        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+//        container.setConnectionFactory(connectionFactory);
+//        container.setQueueNames("consumer_queue");              // 监听的队列
+//        container.setAcknowledgeMode(AcknowledgeMode.AUTO);     // 根据情况确认消息
+//        container.setMessageListener((message) -> {
+//            System.out.println("====接收到消息=====");
+//            System.out.println(new String(message.getBody()));
+//            //抛出NullPointerException异常则重新入队列
+//            //throw new NullPointerException("消息消费失败");
+//            //当抛出的异常是AmqpRejectAndDontRequeueException异常的时候，则消息会被拒绝，且requeue=false
+//            //throw new AmqpRejectAndDontRequeueException("消息消费失败");
+//            //当抛出ImmediateAcknowledgeAmqpException异常，则消费者会被确认
+//            throw new ImmediateAcknowledgeAmqpException("消息消费失败");
+//        });
+//        return container;
+//    }
 }

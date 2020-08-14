@@ -42,6 +42,8 @@ spring:
   generator:
     parent: com.ryl
     module: res
+  main:
+    allow-bean-definition-overriding: true
 #jwt:
 #  header-key:
 #  secret:
