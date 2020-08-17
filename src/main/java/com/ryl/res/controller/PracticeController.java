@@ -24,6 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -290,7 +291,12 @@ public class PracticeController {
         Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams("标题", "sheet"), ExportModel.class, list);
         try {
             OutputStream os = response.getOutputStream();
-            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.addHeader("Access-Control-Expose-Headers", "Content-Disposition");
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("content-Type", "application/vnd.ms-excel");
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("订单导出列表.xlsx", "UTF-8"));
+            response.setHeader("Pragma", URLEncoder.encode("订单导出列表.xlsx", "UTF-8"));
+//            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             workbook.write(os);
         } catch (IOException e) {
             e.printStackTrace();
